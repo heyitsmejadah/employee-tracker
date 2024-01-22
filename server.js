@@ -42,7 +42,12 @@ titleDisplay = () => {
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Update an employee role'
+                'Update an employee role',
+                'Update an employee manager',
+                'Delete a department',
+                'Delete a role',
+                'Delete an employee',
+                'View total utilized budget of a department',
             ]
         }
     ]).then((answers) => {
@@ -57,6 +62,12 @@ titleDisplay = () => {
             case 'View all employees':
                 showEmployees();
                 break;
+            case 'View employees by manager':
+                showEmployeesByManager();
+                break;
+            case 'View employees by department':
+                showEmployeesByDepartment();
+                break;
             case 'Add a department':
                 addDepartment();
                 break;
@@ -68,6 +79,21 @@ titleDisplay = () => {
                 break;
             case 'Update an employee role':
                 updateemployeeRole();
+                break;
+            case 'Update an employee manager':
+                updateemployeeManager();
+                break;
+            case 'Delete a department':
+                deleteDepartment();
+                break;
+            case 'Delete a role':
+                deleteRole();
+                break;
+            case 'Delete an employee':
+                deleteEmployee();
+                break;
+            case 'View total utilized budget of a department':
+                viewBudget();
                 break;
             default:
                 console.log('Invalid option');
@@ -117,6 +143,54 @@ titleDisplay = () => {
             promptStart();
         });
     }
+    function showEmployeesByManager() {
+        // Prompt user for manager ID
+        inquirer.prompt([
+            {
+                type: 'number',
+                name: 'manager_id',
+                message: 'Enter the ID of the manager:'
+            }
+        ]).then((answers) => {
+            // Query the database to get employee data
+            connection.query('SELECT * FROM employee WHERE manager_id = ?', answers.manager_id, (err, results) => {
+                if (err) {
+                    console.error('Error retrieving employee data: ' + err.stack);
+                    return;
+                }
+                
+                // Display employee data
+                console.log('Employee Data:');
+                console.table(results);
+                promptStart();
+            });
+        });
+    }
+
+    function showEmployeesByDepartment() {
+        // Prompt user for department ID
+        inquirer.prompt([
+            {
+                type: 'number',
+                name: 'department_id',
+                message: 'Enter the ID of the department:'
+            }
+        ]).then((answers) => {
+            // Query the database to get employee data
+            connection.query('SELECT * FROM employee WHERE department_id = ?', answers.department_id, (err, results) => {
+                if (err) {
+                    console.error('Error retrieving employee data: ' + err.stack);
+                    return;
+                }
+                
+                // Display employee data
+                console.log('Employee Data:');
+                console.table(results);
+                promptStart();
+            });
+        });
+    }
+
     function addDepartment() {
         // Prompt user for new department name
         inquirer.prompt([
@@ -231,6 +305,125 @@ titleDisplay = () => {
                 
                 // Display success message
                 console.log('Updated employee role in database.');
+                promptStart();
+            });
+        });
+    }
+    function updateemployeeManager() {
+        // Prompt user for employee ID and new manager ID
+        inquirer.prompt([
+            {
+                type: 'number',
+                name: 'employee_id',
+                message: 'Enter the ID of the employee to update:'
+            },
+            {
+                type: 'number',
+                name: 'manager_id',
+                message: 'Enter the new manager ID for the employee:'
+            }
+        ]).then((answers) => {
+            // Update employee manager in database
+            connection.query('UPDATE employee SET manager_id = ? WHERE id = ?', [answers.manager_id, answers.employee_id], (err, results) => {
+                if (err) {
+                    console.error('Error updating employee manager: ' + err.stack);
+                    return;
+                }
+                
+                // Display success message
+                console.log('Updated employee manager in database.');
+                promptStart();
+            });
+        });
+    }
+
+    function deleteDepartment() {
+        // Prompt user for department ID
+        inquirer.prompt([
+            {
+                type: 'number',
+                name: 'id',
+                message: 'Enter the ID of the department to delete:'
+            }
+        ]).then((answers) => {
+            // Delete department from database
+            connection.query('DELETE FROM department WHERE id = ?', answers.id, (err, results) => {
+                if (err) {
+                    console.error('Error deleting department: ' + err.stack);
+                    return;
+                }
+                
+                // Display success message
+                console.log('Deleted department from database.');
+                promptStart();
+            });
+        });
+    }
+
+    function deleteRole() {
+        // Prompt user for role ID
+        inquirer.prompt([
+            {
+                type: 'number',
+                name: 'id',
+                message: 'Enter the ID of the role to delete:'
+            }
+        ]).then((answers) => {
+            // Delete role from database
+            connection.query('DELETE FROM role WHERE id = ?', answers.id, (err, results) => {
+                if (err) {
+                    console.error('Error deleting role: ' + err.stack);
+                    return;
+                }
+                
+                // Display success message
+                console.log('Deleted role from database.');
+                promptStart();
+            });
+        });
+    }
+
+    function deleteEmployee() {
+        // Prompt user for employee ID
+        inquirer.prompt([
+            {
+                type: 'number',
+                name: 'id',
+                message: 'Enter the ID of the employee to delete:'
+            }
+        ]).then((answers) => {
+            // Delete employee from database
+            connection.query('DELETE FROM employee WHERE id = ?', answers.id, (err, results) => {
+                if (err) {
+                    console.error('Error deleting employee: ' + err.stack);
+                    return;
+                }
+                
+                // Display success message
+                console.log('Deleted employee from database.');
+                promptStart();
+            });
+        });
+    }
+    function viewBudget() {
+        // Prompt user for department ID
+        inquirer.prompt([
+            {
+                type: 'number',
+                name: 'department_id',
+                message: 'Enter the ID of the department:'
+            }
+        ]).then((answers) => {
+            // Query the database to get total utilized budget
+            connection.query('SELECT SUM(salary) AS budget FROM role WHERE department_id = ?', answers.department_id, (err, results) => {
+                if (err) {
+                    console.error('Error retrieving total utilized budget: ' + err.stack);
+                    return;
+                }
+                
+                // Display total utilized budget
+                console.log('Total utilized budget:');
+                console.table(results);
                 promptStart();
             });
         });
