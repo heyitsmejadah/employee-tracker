@@ -218,7 +218,7 @@ titleDisplay = () => {
         inquirer.prompt([
             {
                 type: 'input',
-                name: 'title',
+                name: 'job_title',
                 message: 'Enter the title of the new role:'
             },
             {
