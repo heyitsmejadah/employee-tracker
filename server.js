@@ -196,7 +196,7 @@ titleDisplay = () => {
         inquirer.prompt([
             {
                 type: 'input',
-                name: 'name',
+                name: 'department_name',
                 message: 'Enter the name of the new department:'
             }
         ]).then((answers) => {

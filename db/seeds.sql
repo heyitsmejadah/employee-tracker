@@ -12,7 +12,7 @@ INSERT INTO role (id, job_title, salary, department_id) VALUES
 (4, 'IT Manager', 90000, 3);
 
 -- Insert data into the employee table
-INSERT INTO employee (id, first_name, last_name, role_id, manager_id, job_title, department, salary) VALUES
+INSERT INTO employee (id, first_name, last_name, role_id, manager_id, job_title, department_name, salary) VALUES
 (1, 'John', 'Doe', 1, NULL, 'HR Manager', 'HR', 70000),
 (2, 'Jane', 'Smith', 2, 1, 'Financial Analyst', 'Finance', 60000),
 (3, 'Bob', 'Johnson', 3, 1, 'Software Engineer', 'IT', 80000),
