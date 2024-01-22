@@ -372,7 +372,8 @@ titleDisplay = () => {
             // Delete role from database
             connection.query('DELETE FROM role WHERE id = ?', answers.id, (err, results) => {
                 if (err) {
-                    console.error('Error deleting role: ' + err.stack);
+                    console.error('Error deleting role: Employee details exist for this role.Please delete all employees for the role first.' 
+                    + err.stack);
                     return;
                 }
                 
